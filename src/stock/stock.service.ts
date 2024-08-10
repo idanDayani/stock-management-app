@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { formatAxiosError } from '../../common/formatAxiosError';
+import { formatAxiosError } from '../common/formatAxiosError';
 
 @Injectable()
 export class StockService {
