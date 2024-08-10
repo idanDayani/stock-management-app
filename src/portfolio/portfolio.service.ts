@@ -14,7 +14,7 @@ export class PortfolioService {
   async getPortfolio(params: { userId: string }): Promise<Stock[]> {
     const { userId } = params;
     const portfolio = await this.portfolioModel.findOne({ userId }).exec();
-    return (portfolio.stocks as Stock[]) || [];
+    return (portfolio?.stocks as Stock[]) || [];
   }
 
   async addStockToPortfolio(params: {
@@ -32,15 +32,18 @@ export class PortfolioService {
       exchange,
       _id: -1,
     });
+
     let portfolio = await this.portfolioModel.findOne({ userId }).exec();
     if (!portfolio) {
       portfolio = new this.portfolioModel({ userId, stocks: [stock] });
     } else {
-      if (portfolio.stocks.find((s) => s.symbol === symbol)) {
-        throw new Error('Stock is already in the portfolio');
+      const isStockExists = portfolio?.stocks.find((s) => s.symbol === symbol);
+      if (isStockExists) {
+        throw new Error('Stock already exists in portfolio');
       }
+      portfolio.stocks.push(stock);
     }
-    portfolio.stocks.push(stock);
+
     await portfolio.save();
   }
 
