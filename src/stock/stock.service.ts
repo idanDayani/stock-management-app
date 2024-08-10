@@ -27,15 +27,25 @@ export class StockService {
 
   async getLatestQuoteStock(symbol: string) {
     const url = `${this.quoteStockUrl}${symbol}?apikey=${this.apiKey}`;
-    const { data } = await firstValueFrom(this.httpService.get(url));
-    const { name, exchange } = data[0];
-    const stockLatestQuote = { symbol, name, exchange, latestQuote: data[0] };
-    return stockLatestQuote;
+    try {
+      const { data } = await firstValueFrom(this.httpService.get(url));
+      const { name, exchange } = data[0];
+      const stockLatestQuote = { symbol, name, exchange, latestQuote: data[0] };
+      return stockLatestQuote;
+    } catch (e) {
+      const { message, status, data, isRequestExists } = formatAxiosError(e);
+      console.log({ message, status, data, isRequestExists });
+    }
   }
 
   async getPriceChangeOverPeriod(symbol: string) {
     const url = `${this.priceChangeOverPeriodUrl}${symbol}?apikey=${this.apiKey}`;
-    const response = await firstValueFrom(this.httpService.get(url));
-    return response.data[0];
+    try {
+      const response = await firstValueFrom(this.httpService.get(url));
+      return response.data[0];
+    } catch (e) {
+      const { message, status, data, isRequestExists } = formatAxiosError(e);
+      console.log({ message, status, data, isRequestExists });
+    }
   }
 }
