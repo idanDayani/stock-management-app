@@ -16,10 +16,4 @@ export class StockController {
     const response = await this.stocksService.getLatestQuoteStock(symbol);
     return response;
   }
-
-  @Get('getPriceChangeOverPeriod')
-  async getPriceChangeOverPeriod(@Query('symbol') symbol: string) {
-    const response = await this.stocksService.getPriceChangeOverPeriod(symbol);
-    return response;
-  }
 }

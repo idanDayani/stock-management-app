@@ -26,26 +26,30 @@ export class StockService {
   }
 
   async getLatestQuoteStock(symbol: string) {
-    const url = `${this.quoteStockUrl}${symbol}?apikey=${this.apiKey}`;
+    const urlQuoate = `${this.quoteStockUrl}${symbol}?apikey=${this.apiKey}`;
+    const urlChange = `${this.priceChangeOverPeriodUrl}${symbol}?apikey=${this.apiKey}`;
     try {
-      const { data } = await firstValueFrom(this.httpService.get(url));
-      const { name, exchange } = data[0];
-      const stockLatestQuote = { symbol, name, exchange, latestQuote: data[0] };
-      return stockLatestQuote;
+      const [{ data: quoteData }, { data: changeData }] = await Promise.all([
+        firstValueFrom(this.httpService.get(urlQuoate)),
+        firstValueFrom(this.httpService.get(urlChange)),
+      ]);
+
+      const stockLatestQuote = this.formatStockLatestQuoteData(quoteData[0]);
+      const stockPriceChange = changeData[0];
+      console.log({ stockLatestQuote, stockPriceChange });
+      return { stockLatestQuote, stockPriceChange };
     } catch (e) {
       const { message, status, data, isRequestExists } = formatAxiosError(e);
       console.log({ message, status, data, isRequestExists });
     }
   }
 
-  async getPriceChangeOverPeriod(symbol: string) {
-    const url = `${this.priceChangeOverPeriodUrl}${symbol}?apikey=${this.apiKey}`;
-    try {
-      const response = await firstValueFrom(this.httpService.get(url));
-      return response.data[0];
-    } catch (e) {
-      const { message, status, data, isRequestExists } = formatAxiosError(e);
-      console.log({ message, status, data, isRequestExists });
-    }
+  formatStockLatestQuoteData(stockLatestQuote: any) {
+    return {
+      symbol: stockLatestQuote.symbol,
+      name: stockLatestQuote.name,
+      exchange: stockLatestQuote.exchange,
+      latestQuote: stockLatestQuote,
+    };
   }
 }
