@@ -43,8 +43,7 @@ describe('PortfolioController (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post('/portfolio/addStock')
       .send({ stock: validStock })
-      .set('Cookie', `userId=${userId};`)
-      .expect(201);
+      .set('Cookie', `userId=${userId};`);
 
     expect(response.status).toBe(201);
   });
@@ -58,8 +57,7 @@ describe('PortfolioController (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post('/portfolio/addStock')
       .send({ stock: invalidStock })
-      .set('Cookie', `userId=${userId};`)
-      .expect(500);
+      .set('Cookie', `userId=${userId};`);
 
     expect(response.status).toBe(500);
   });

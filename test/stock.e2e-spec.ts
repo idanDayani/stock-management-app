@@ -25,7 +25,6 @@ describe('StockController (e2e)', () => {
       .query({ symbol: 'AAPL' })
       .expect(200);
 
-    expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBeTruthy();
     expect(response.body.length).toBeGreaterThan(0); // Assuming that the API will return at least one stock for Apple Inc.
   });
