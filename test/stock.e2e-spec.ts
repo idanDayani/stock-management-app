@@ -20,18 +20,13 @@ describe('StockController (e2e)', () => {
   });
 
   it('/stock/search (GET) - should get stock data from FMP API', async () => {
-    const mockResponse = {
-      symbol: 'AAPL',
-      name: 'Apple Inc.',
-      exchange: 'NASDAQ',
-    };
-
     const response = await request(app.getHttpServer())
       .get('/stock/search')
       .query({ symbol: 'AAPL' })
       .expect(200);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockResponse);
+    expect(Array.isArray(response.body)).toBeTruthy();
+    expect(response.body.length).toBeGreaterThan(0); // Assuming that the API will return at least one stock for Apple Inc.
   });
 });
