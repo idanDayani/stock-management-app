@@ -8,7 +8,7 @@ export class StockService {
   constructor(private readonly httpService: HttpService) {}
 
   private readonly baseUrl = 'https://financialmodelingprep.com/api/v3/';
-  private readonly apiKey = `BSa2zN0rpGCuWhsunQTmgvY0k5KcBDgw`;
+  private readonly apiKey = 'nWBeORODVowr5O6W5fICL6g83u3TmtJr';
   private readonly searchStockUrl = `${this.baseUrl}search/`;
   private readonly quoteStockUrl = `${this.baseUrl}quote/`;
   private readonly priceChangeOverPeriodUrl = `${this.baseUrl}stock-price-change/`;
