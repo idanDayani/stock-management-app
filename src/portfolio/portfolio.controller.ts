@@ -1,4 +1,14 @@
-import { Controller, Post, Get, Body, Delete, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Delete,
+  Req,
+  Res,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import { Stock } from 'src/stock/stock.schema';
 import { Request, Response } from 'express';
@@ -9,7 +19,10 @@ export class PortfolioController {
   constructor(private readonly portfolioService: PortfolioService) {}
 
   @Get('getPortfolio')
-  async getPortfolio(@Req() req: Request, @Res() res: Response) {
+  async getPortfolio(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     let userId = req.cookies['userId'];
 
     if (!userId) {
@@ -18,13 +31,13 @@ export class PortfolioController {
     }
 
     const portfolio = await this.portfolioService.getPortfolio({ userId });
-    return res.send(portfolio);
+    return portfolio;
   }
 
   @Post('addStock')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async addStockToPortfolio(
     @Req() req: Request,
-    @Res() res: Response,
     @Body()
     body: {
       stock: Stock;
@@ -40,13 +53,12 @@ export class PortfolioController {
       currency,
       exchange,
     });
-    return res.send();
   }
 
   @Delete('deleteStock')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteStockFromPortfolio(
     @Req() req: Request,
-    @Res() res: Response,
     @Body() body: { symbol: string },
   ) {
     const userId = req.cookies['userId'];
@@ -55,6 +67,5 @@ export class PortfolioController {
       userId,
       symbol,
     });
-    return res.send();
   }
 }

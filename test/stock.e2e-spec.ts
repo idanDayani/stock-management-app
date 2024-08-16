@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -23,7 +23,7 @@ describe('StockController (e2e)', () => {
     const response = await request(app.getHttpServer())
       .get('/stock/search')
       .query({ symbol: 'AAPL' })
-      .expect(200);
+      .expect(HttpStatus.OK);
 
     expect(Array.isArray(response.body)).toBeTruthy();
     expect(response.body.length).toBeGreaterThan(0); // Assuming that the API will return at least one stock for Apple Inc.

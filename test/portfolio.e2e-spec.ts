@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import * as mongoose from 'mongoose';
@@ -45,7 +45,7 @@ describe('PortfolioController (e2e)', () => {
       .send({ stock: validStock })
       .set('Cookie', `userId=${userId};`);
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(HttpStatus.NO_CONTENT);
   });
 
   it('/portfolio/addStock (POST) - should fail add stock', async () => {
@@ -59,6 +59,6 @@ describe('PortfolioController (e2e)', () => {
       .send({ stock: invalidStock })
       .set('Cookie', `userId=${userId};`);
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
   });
 });
